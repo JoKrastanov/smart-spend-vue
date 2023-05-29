@@ -10,7 +10,7 @@
       v-else-if="!userLoggedIn && currPage === 'register'"
       @loginButtonClicked="setPage('login')"
     />
-    <AppContent v-else />
+    <AppContent v-else @sessionExpired="sessionExpired" />
   </div>
 </template>
 
@@ -30,6 +30,7 @@ export default {
   },
   setup() {
     const currPage = ref("login");
+    const sessionExpiredValue = ref(false);
     const userLoggedIn = ref(false);
 
     const setPage = (page) => {
@@ -46,6 +47,12 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("refresh");
       localStorage.removeItem("id");
+      setPage("login");
+    };
+
+    const sessionExpired = () => {
+      sessionExpiredValue.value = true;
+      userLoggedIn.value = false;
       setPage("login");
     };
 
@@ -66,6 +73,8 @@ export default {
       userLoggedIn,
       logInUser,
       logOutUser,
+      sessionExpired,
+      sessionExpiredValue,
     };
   },
 };

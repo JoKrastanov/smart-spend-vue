@@ -1,32 +1,34 @@
 import axios from "axios"
 
-const endPoint = "http://localhost:4000"
+const endPoint = "http://localhost:5000"
 
-export const login = async (email, password) => {
-    try {
-        const data = {
-            email: email,
-            password: password
-        }
-        const config = {
-            method: 'POST',
-            url: `${endPoint}/auth/login`,
-            data: data
-        }
-        const response = await axios(config);
-        return response.data;
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const getLoggedUserDetails = async (userId) => {
+export const getCompanyDetails = async (companyId) => {
     try {
         const token = localStorage.getItem('token');
         const refresh = localStorage.getItem('refresh')
         const config = {
             method: 'GET',
-            url: `${endPoint}/auth/user/${userId}`,
+            url: `${endPoint}/company/${companyId}`,
+            headers: {
+                token,
+                refresh
+            }
+        }
+        const response = await axios(config);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+        return null;
+    }
+}
+
+export const getLicenseDetails = async (companyId) => {
+    try {
+        const token = localStorage.getItem('token');
+        const refresh = localStorage.getItem('refresh')
+        const config = {
+            method: 'GET',
+            url: `${endPoint}/license/${companyId}`,
             headers: {
                 token,
                 refresh
