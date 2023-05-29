@@ -1,14 +1,19 @@
 <template>
   <div
-    class="relative flex flex-col items-center mt-24 ml-10 mr-10 bg-secondary-color rounded-lg text-primary-color w-full h-144 pt-10"
+    class="border border-black relative flex flex-col items-center mt-24 ml-10 mr-10 bg-secondary-color rounded-lg text-primary-color w-full h-144 pt-10"
   >
     <LoadingSpinner v-if="loading" />
     <div v-else class="absolute top-10 left-10">
       <div>
+        <button
+          class="mb-8 bg-primary-color p-2 rounded-sm text-secondary-color font-semibold border border-black"
+        >
+          New Bank Account
+        </button>
         <p class="font-bold">Select Bank account:</p>
         <select
           v-model="selectedBankAccount"
-          class="text-black rounded-sm border border-black"
+          class="p-1 text-black rounded-sm border border-black"
         >
           <option
             v-for="option in companyAccounts"
@@ -28,11 +33,25 @@
           Balance: {{ selectedBankAccountDetails.balance.amount / 100 }}
           {{ selectedBankAccountDetails.balance.currency }}
         </p>
+        <button
+          class="mt-4 bg-primary-color p-2 rounded-sm text-secondary-color font-semibold border border-black"
+          @click="sendingMoney = !sendingMoney"
+        >
+          {{ sendingMoney ? "Cancel Transaction" : "Send Money" }}
+        </button>
+        <SendMoneyPopup
+          v-if="sendingMoney"
+          :iban="selectedBankAccountDetails.IBAN"
+          @moneySent="updateBankaccount"
+        />
       </div>
     </div>
     <div class="max-h-[30rem] overflow-y-auto" v-if="showTransactions">
       <div v-if="transactionHistory">
         <table v-if="transactionHistory.length" class="rounded-lg">
+          <tr>
+            <th colspan="4">Transaction History</th>
+          </tr>
           <tr>
             <th>Sender</th>
             <th>Receiver</th>
@@ -55,11 +74,13 @@
 
 <script>
 import LoadingSpinner from "./LoadingSpinner.vue";
+import SendMoneyPopup from "./SendMoneyPopup.vue";
 import { ref, watch } from "vue";
 import { getBankAccountTransactions } from "@/api/bank";
 export default {
   components: {
     LoadingSpinner,
+    SendMoneyPopup,
   },
   props: {
     loading: {
@@ -77,18 +98,28 @@ export default {
     const selectedBankAccountDetails = ref(null);
     const showTransactions = ref(false);
     const transactionHistory = ref(null);
+    const sendingMoney = ref(false);
+
+    const fetchTransactionHistory = async () => {
+      showTransactions.value = true;
+      transactionHistory.value = await getBankAccountTransactions(
+        selectedBankAccountDetails.value.IBAN
+      );
+    };
+
+    const updateBankaccount = async (amount) => {
+      transactionHistory.value = [];
+      selectedBankAccountDetails.value.balance.amount -= amount * 100;
+      await fetchTransactionHistory();
+    };
 
     watch(
       () => selectedBankAccount.value,
       async () => {
-        transactionHistory.value = null;
         selectedBankAccountDetails.value = props.companyAccounts.find(
           (acc) => acc.name === selectedBankAccount.value
         );
-        showTransactions.value = true;
-        transactionHistory.value = await getBankAccountTransactions(
-          selectedBankAccountDetails.value.IBAN
-        );
+        await fetchTransactionHistory();
       }
     );
 
@@ -97,6 +128,8 @@ export default {
       selectedBankAccountDetails,
       transactionHistory,
       showTransactions,
+      sendingMoney,
+      updateBankaccount,
     };
   },
 };
@@ -110,7 +143,7 @@ tr:nth-child(even) {
 tr,
 th,
 td {
-  border: 1px solid black;
+  border: 1px solid #fbfbfb;
   padding: 1rem;
 }
 </style>

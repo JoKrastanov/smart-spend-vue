@@ -41,3 +41,27 @@ export const getBankAccountTransactions = async (IBAN) => {
         return null;
     }
 }
+
+export const sendMoney = async (ibanFrom, ibanTo, amount) => {
+    try {
+        const token = localStorage.getItem('token');
+        const refresh = localStorage.getItem('refresh')
+        const config = {
+            method: 'POST',
+            url: `${endPoint}/bank/${ibanFrom}/send`,
+            headers: {
+                token,
+                refresh
+            },
+            data: {
+                IBANReciever: ibanTo,
+                amount: amount
+            }
+        }
+        const response = await axios(config);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+        return null;
+    }
+}
