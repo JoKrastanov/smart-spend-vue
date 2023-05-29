@@ -8,9 +8,9 @@ module.exports = {
         'primary-color': "#FBFBFB",
         'secondary-color': "#507DBC",
         'text-color': "#04080F",
-        'accent-color': "FFA400"
+        'accent-color': "#FFA400"
       }
-  
+
     },
   },
   variants: {
