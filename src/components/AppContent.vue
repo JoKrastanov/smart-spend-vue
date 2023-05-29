@@ -1,14 +1,14 @@
 <template>
   <div class="flex">
     <div>
-      <UserDetails :userData="userData" />
-      <CompanyDetails :companyData="companyData" :licenseData="licenseData" />
+      <UserDetails :loading="loading" :userData="userData" />
+      <CompanyDetails
+        :loading="loading"
+        :companyData="companyData"
+        :licenseData="licenseData"
+      />
     </div>
-    <div
-      class="flex flex-col justify-center items-center mt-24 ml-10 mr-10 bg-secondary-color rounded-lg text-primary-color w-full h-144"
-    >
-      TESTING
-    </div>
+    <BankDetails :companyAccounts="companyAccounts" :loading="loading" />
   </div>
 </template>
 
@@ -17,19 +17,24 @@ import { onMounted, ref } from "vue";
 import { convertUnixToDate } from "../helpers/convertUnixToDate";
 import UserDetails from "./UserDetails.vue";
 import CompanyDetails from "./CompanyDetails.vue";
+import BankDetails from "./BankDetails.vue";
 import { getLoggedUserDetails } from "../api/user";
 import { getCompanyDetails, getLicenseDetails } from "../api/company";
-
+import { getComapnyBankAccounts } from "../api/bank";
 export default {
   components: {
     UserDetails,
     CompanyDetails,
+    BankDetails,
   },
   setup(props, { emit }) {
     const userData = ref({});
     const companyData = ref({});
     const licenseData = ref({});
+    const companyAccounts = ref({});
+    const loading = ref(true);
     onMounted(async () => {
+      loading.value = true;
       userData.value = await getLoggedUserDetails(localStorage.getItem("id"));
       if (!userData.value) {
         emit("sessionExpired");
@@ -42,12 +47,25 @@ export default {
       licenseData.value.lastPayment = convertUnixToDate(
         licenseData.value.lastPayment
       );
+      companyAccounts.value = await getComapnyBankAccounts(
+        userData.value.companyId
+      );
+      if (
+        userData.value &&
+        companyData.value &&
+        licenseData.value &&
+        companyAccounts.value
+      ) {
+        loading.value = false;
+      }
     });
 
     return {
       userData,
       companyData,
       licenseData,
+      loading,
+      companyAccounts,
     };
   },
 };

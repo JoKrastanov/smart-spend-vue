@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 flex items-center justify-between w-screen bg-secondary-color rounded-b-lg"
+    class="z-50 fixed top-0 flex items-center justify-between w-screen bg-secondary-color rounded-b-lg"
   >
     <div class="pl-4 py-2">
       <img class="rounded-full" :src="logo" />

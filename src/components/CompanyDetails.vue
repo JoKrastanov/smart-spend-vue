@@ -2,7 +2,7 @@
   <div
     class="flex flex-col justify-center items-center mt-8 ml-10 bg-secondary-color rounded-lg text-primary-color w-72 h-72"
   >
-    <LoadingSpinner v-if="!companyData || !licenseData" />
+    <LoadingSpinner v-if="loading" />
     <div v-else>
       <p class="font-bold">Compay Details:</p>
       <p>Company: {{ companyData.name }}</p>
@@ -24,6 +24,10 @@ export default {
     LoadingSpinner,
   },
   props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
     companyData: {
       type: Object,
       required: true,
