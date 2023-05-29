@@ -5,11 +5,6 @@
     <LoadingSpinner v-if="loading" />
     <div v-else class="absolute top-10 left-10">
       <div>
-        <button
-          class="mb-8 bg-primary-color p-2 rounded-sm text-secondary-color font-semibold border border-black"
-        >
-          New Bank Account
-        </button>
         <p class="font-bold">Select Bank account:</p>
         <select
           v-model="selectedBankAccount"

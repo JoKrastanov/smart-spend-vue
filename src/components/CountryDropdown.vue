@@ -1,5 +1,11 @@
 <template>
-  <select class="w-[9.75rem] text-text-color m-1" id="country" name="country">
+  <select
+    :class="style"
+    id="country"
+    name="country"
+    v-model="selectedValue"
+    @change="$emit('selected', selectedValue)"
+  >
     <option>Select country</option>
     <option value="AF">Afghanistan</option>
     <option value="AX">Aland Islands</option>
@@ -255,3 +261,23 @@
     <option value="ZW">Zimbabwe</option>
   </select>
 </template>
+
+<script>
+import { ref } from "vue";
+export default {
+  props: {
+    style: {
+      type: String,
+      reqired: false,
+      default: "w-[9.75rem] text-text-color m-1",
+    },
+  },
+  setup() {
+    const selectedValue = ref("");
+
+    return {
+      selectedValue,
+    };
+  },
+};
+</script>

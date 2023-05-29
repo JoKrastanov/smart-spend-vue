@@ -6,9 +6,15 @@
         :loading="loading"
         :companyData="companyData"
         :licenseData="licenseData"
+        @edit="editingLicense = !editingLicense"
       />
     </div>
-    <BankDetails :companyAccounts="companyAccounts" :loading="loading" />
+    <CompanySettings
+      v-if="editingLicense"
+      :license="licenseData"
+      @registeredUser="licenseData.registeredEmployees++"
+    />
+    <BankDetails v-else :companyAccounts="companyAccounts" :loading="loading" />
   </div>
 </template>
 
@@ -18,6 +24,7 @@ import { convertUnixToDate } from "../helpers/convertUnixToDate";
 import UserDetails from "./UserDetails.vue";
 import CompanyDetails from "./CompanyDetails.vue";
 import BankDetails from "./BankDetails.vue";
+import CompanySettings from "./CompanySettings";
 import { getLoggedUserDetails } from "../api/user";
 import { getCompanyDetails, getLicenseDetails } from "../api/company";
 import { getComapnyBankAccounts } from "../api/bank";
@@ -26,6 +33,7 @@ export default {
     UserDetails,
     CompanyDetails,
     BankDetails,
+    CompanySettings,
   },
   setup(props, { emit }) {
     const userData = ref({});
@@ -33,6 +41,7 @@ export default {
     const licenseData = ref({});
     const companyAccounts = ref({});
     const loading = ref(true);
+    const editingLicense = ref(false);
     onMounted(async () => {
       loading.value = true;
       userData.value = await getLoggedUserDetails(localStorage.getItem("id"));
@@ -66,6 +75,7 @@ export default {
       licenseData,
       loading,
       companyAccounts,
+      editingLicense,
     };
   },
 };

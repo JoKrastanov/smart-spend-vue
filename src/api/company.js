@@ -41,3 +41,45 @@ export const getLicenseDetails = async (companyId) => {
         return null;
     }
 }
+
+export const registerUser = async (
+    companyId,
+    firstName,
+    lastName,
+    address,
+    phone,
+    country,
+    email,
+    password,
+    department,
+    accountType
+) => {
+    try {
+        const token = localStorage.getItem('token');
+        const refresh = localStorage.getItem('refresh')
+        const config = {
+            method: 'PUT',
+            url: `${endPoint}/license/${companyId}/register/employee`,
+            headers: {
+                token,
+                refresh
+            },
+            data: {
+                firstName,
+                lastName,
+                address,
+                phone,
+                country,
+                email,
+                password,
+                department,
+                accountType
+            }
+        }
+        const response = await axios(config);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+        return null;
+    }
+}
