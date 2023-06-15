@@ -1,5 +1,4 @@
 import axios from "axios"
-require("dotenv").config();
 
 const endPoint = process.env.VUE_APP_IDENTITY_SERVICE
 
