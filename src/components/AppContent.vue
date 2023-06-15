@@ -1,9 +1,9 @@
 <template>
   <div class="flex">
     <div>
-      <UserDetails :loading="loading" :userData="userData" />
+      <UserDetails :loading="userLoading" :userData="userData" />
       <CompanyDetails
-        :loading="loading"
+        :loading="companyLoading"
         :companyData="companyData"
         :licenseData="licenseData"
         @edit="editingLicense = !editingLicense"
@@ -14,7 +14,11 @@
       :license="licenseData"
       @registeredUser="licenseData.registeredEmployees++"
     />
-    <BankDetails v-else :companyAccounts="companyAccounts" :loading="loading" />
+    <BankDetails
+      v-else
+      :companyAccounts="companyAccounts"
+      :loading="bankLoading"
+    />
   </div>
 </template>
 
@@ -41,6 +45,9 @@ export default {
     const licenseData = ref({});
     const companyAccounts = ref({});
     const loading = ref(true);
+    const userLoading = ref(true);
+    const companyLoading = ref(true);
+    const bankLoading = ref(true);
     const editingLicense = ref(false);
     onMounted(async () => {
       loading.value = true;
@@ -59,13 +66,14 @@ export default {
       companyAccounts.value = await getComapnyBankAccounts(
         userData.value.companyId
       );
-      if (
-        userData.value &&
-        companyData.value &&
-        licenseData.value &&
-        companyAccounts.value
-      ) {
-        loading.value = false;
+      if (userData.value) {
+        userLoading.value = false;
+      }
+      if (companyData.value) {
+        companyLoading.value = false;
+      }
+      if (companyAccounts.value) {
+        bankLoading.value = false;
       }
     });
 
@@ -76,6 +84,9 @@ export default {
       loading,
       companyAccounts,
       editingLicense,
+      userLoading,
+      companyLoading,
+      bankLoading,
     };
   },
 };

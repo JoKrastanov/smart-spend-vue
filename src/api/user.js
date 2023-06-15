@@ -1,6 +1,7 @@
 import axios from "axios"
+require("dotenv").config();
 
-const endPoint = "http://localhost:4000"
+const endPoint = process.env.IDENTITY_SERVICE
 
 export const login = async (email, password) => {
     try {

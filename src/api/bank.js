@@ -1,6 +1,7 @@
 import axios from "axios"
+require("dotenv").config();
 
-const endPoint = "http://localhost:6001"
+const endPoint = process.env.BANK_SERVICE
 
 export const getComapnyBankAccounts = async (companyId) => {
     try {

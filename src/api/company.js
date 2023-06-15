@@ -1,6 +1,7 @@
 import axios from "axios"
+require("dotenv").config();
 
-const endPoint = "http://localhost:5000"
+const endPoint = process.env.LICENSE_SERVICE
 
 export const getCompanyDetails = async (companyId) => {
     try {
