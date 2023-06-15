@@ -1,7 +1,7 @@
 import axios from "axios"
 require("dotenv").config();
 
-const endPoint = process.env.BANK_SERVICE
+const endPoint = process.env.VUE_APP_BANK_SERVICE
 
 export const getComapnyBankAccounts = async (companyId) => {
     try {

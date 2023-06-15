@@ -1,7 +1,7 @@
 import axios from "axios"
 require("dotenv").config();
 
-const endPoint = process.env.LICENSE_SERVICE
+const endPoint = process.env.VUE_APP_LICENSE_SERVICE
 
 export const getCompanyDetails = async (companyId) => {
     try {
