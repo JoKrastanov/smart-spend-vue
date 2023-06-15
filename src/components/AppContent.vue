@@ -64,7 +64,8 @@ export default {
         licenseData.value.lastPayment
       );
       companyAccounts.value = await getComapnyBankAccounts(
-        userData.value.companyId
+        userData.value.companyId,
+        userData.value.department
       );
       if (userData.value) {
         userLoading.value = false;

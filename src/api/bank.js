@@ -2,13 +2,13 @@ import axios from "axios"
 
 const endPoint = process.env.VUE_APP_BANK_SERVICE
 
-export const getComapnyBankAccounts = async (companyId) => {
+export const getComapnyBankAccounts = async (companyId, department) => {
     try {
         const token = localStorage.getItem('token');
         const refresh = localStorage.getItem('refresh')
         const config = {
             method: 'GET',
-            url: `${endPoint}/bank/company/${companyId}`,
+            url: `${endPoint}/bank/company/${companyId}/department/${department}`,
             headers: {
                 token,
                 refresh
