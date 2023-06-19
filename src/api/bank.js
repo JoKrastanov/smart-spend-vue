@@ -35,7 +35,7 @@ export const getBankAccountTransactions = async (IBAN) => {
             }
         }
         const response = await axios(config);
-        return response.data.reverse();
+        return response.data;
     } catch (error) {
         console.log(error)
         return null;
